@@ -301,16 +301,16 @@ async def generate_outreach_emails(request: OutreachData):
 
 
 if __name__ == "__main__":
-    # uvicorn.run(
-    #     "app:app",
-    #     host="0.0.0.0",
-    #     port=8000,
-    #     reload=True,
-    #     log_level="info"
-    # )
+    uvicorn.run(
+        "app:app",
+        host="0.0.0.0",
+        port=5050,
+        reload=True,
+        log_level="info"
+    )
 
-    ai_matcher = AI_Matcher()
-    ai_matcher.push_influencer(influencers)
+    # ai_matcher = AI_Matcher()
+    # ai_matcher.push_influencer(influencers)
 
     # Start command 
-    # uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+    # uvicorn app:app --host 0.0.0.0 --port 5050 --reload
