@@ -271,3 +271,14 @@ influencers = [
         'link': 'https://www.youtube.com/@jomakaze'
     },
 ]
+
+temp_influencer = [
+    {
+        'username': 'dev.ankeshkumar',
+        'followers': 260,
+        "email": "ankesh3905222@gmail.com",
+        'platform': 'Instagram',
+        'bio': 'Tech and programming content influencer.',
+        'link': 'https://www.instagram.com/dev.ankeshkumar/'
+    },
+]

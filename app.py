@@ -1,9 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 import uvicorn
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import Pinecone
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.documents import Document
 from langchain_pinecone import PineconeVectorStore
@@ -12,10 +11,11 @@ from pinecone import Pinecone
 import os
 import hashlib
 from fastapi.middleware.cors import CORSMiddleware
-from mock_data import influencers
 from langchain.prompts import ChatPromptTemplate
 import json
-from typing import Dict, Any
+from mock_data import temp_influencer, influencers
+import smtplib
+from email.message import EmailMessage
 
 # Load environment variables from .env file
 load_dotenv()
@@ -26,6 +26,7 @@ class InfluencerData(BaseModel):
     email: str
     bio: str
     followers: int
+    platform: str  # Added missing platform field
     link: Optional[str] = None
 
 class InfluencerResponse(BaseModel):
@@ -34,6 +35,7 @@ class InfluencerResponse(BaseModel):
     email: str
     bio: str
     followers: int
+    platform: str  # Added missing platform field
     link: Optional[str] = None
 
 class QueryRequest(BaseModel):
@@ -53,8 +55,31 @@ class OutreachData(BaseModel):
     brand_name: str = Field(..., description="Name of the brand for outreach email generation")
     brand_description: str = Field(..., description="Description of the brand for outreach email generation")
 
+class EmailResponse(BaseModel):
+    """Email response model for outreach emails subject and body."""
+    subject: str = Field(..., description="Subject of the outreach email")
+    body: str = Field(..., description="Body of the outreach email")
+
 class OutreachResp(BaseModel):
-    emails: List[str]
+    emails: List[EmailResponse]  # Fixed: should be List[EmailResponse], not List[List[Dict]]
+
+def send_email(receiver_email: str, subject: str, body: str):
+    sender_email = "ankesh3905222@gmail.com"
+    sender_password = "zqbe zgjg dcee vani"  # 🔐 hardcoded (not secure for production)
+
+    msg = EmailMessage()
+    msg['Subject'] = subject
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+    msg.set_content(body)
+
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login(sender_email, sender_password)
+            smtp.send_message(msg)
+        print(f"Email sent to {receiver_email} with subject: {subject}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -73,14 +98,15 @@ app.add_middleware(
 )
 
 def generate_deterministic_id(data):
-    unique_str = data['username'] + data.get('email', ' ')
+    """Generate a deterministic ID based on username and email."""
+    unique_str = data['username'] + data.get('email', '')
     return hashlib.md5(unique_str.encode()).hexdigest()
 
 class AI_Matcher:
     def __init__(self):
         try:
             # Initialize Google Generative AI
-            self.llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.3)
+            self.llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0.3)
             self.embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
             
             # Initialize the Pinecone client
@@ -89,6 +115,7 @@ class AI_Matcher:
             raise HTTPException(status_code=500, detail=f"Failed to initialize AI Matcher: {str(e)}")
 
     def pineconeIndex_init(self):
+        """Initialize Pinecone index connection."""
         index_name = "influencer-matching"
 
         try:
@@ -104,6 +131,7 @@ class AI_Matcher:
             raise HTTPException(status_code=500, detail=f"Failed to initialize Pinecone index: {str(e)}")
 
     def push_influencer(self, influencer_data):
+        """Push influencer data to Pinecone vector database."""
         try:
             index = self.pineconeIndex_init()
             docs = []
@@ -122,10 +150,10 @@ class AI_Matcher:
                     }
                 )
                 docs.append(doc)
-            # print(docs)
+
             vectorstore = PineconeVectorStore(index=index, embedding=self.embeddings, namespace="Influencers")
             
-            # This will auto-generate document IDs
+            # Generate deterministic IDs for each influencer
             ids = [generate_deterministic_id(data) for data in influencer_data]
             vectorstore.add_documents(documents=docs, ids=ids)
             return len(docs)
@@ -133,8 +161,8 @@ class AI_Matcher:
             raise HTTPException(status_code=500, detail=f"Failed to push influencers: {str(e)}")
     
     def query_influencer(self, query, k):
+        """Query influencers from vector database based on similarity search."""
         try:
-            ## Query top k influencers based on the query and return their details with id 
             index = self.pineconeIndex_init()
             vectorstore = PineconeVectorStore(index=index, embedding=self.embeddings, namespace="Influencers")
             results = vectorstore.similarity_search(query, k=k)
@@ -163,25 +191,27 @@ ai_matcher = AI_Matcher()
 
 @app.get("/")
 async def root():
+    """Root endpoint with API information."""
     return {
         "message": "Influencer Matching API",
         "version": "1.0.0",
         "endpoints": {
             "push_influencers": "/influencers/push",
             "query_influencers": "/influencers/query",
+            "search_influencers": "/influencers/search/{query}",
+            "outreach_email": "/influencers/outreachEmailGenerator",
             "health": "/health"
         }
     }
 
 @app.get("/health")
 async def health_check():
+    """Health check endpoint."""
     return {"status": "healthy", "message": "AI Matcher is running"}
 
 @app.post("/influencers/push", response_model=dict)
 async def push_influencers(request: PushInfluencersRequest):
-    """
-    Push influencer data to the vector database
-    """
+    """Push influencer data to the vector database."""
     try:
         # Convert Pydantic models to dict
         influencer_data = [influencer.dict() for influencer in request.influencers]
@@ -197,9 +227,7 @@ async def push_influencers(request: PushInfluencersRequest):
 
 @app.post("/influencers/query", response_model=QueryResponse)
 async def query_influencers(request: QueryRequest):
-    """
-    Query influencers based on search criteria
-    """
+    """Query influencers based on search criteria."""
     try:
         influencers = ai_matcher.query_influencer(request.query, request.k)
         return QueryResponse(
@@ -213,9 +241,7 @@ async def query_influencers(request: QueryRequest):
 
 @app.get("/influencers/search/{query}")
 async def search_influencers_get(query: str, k: int = 5):
-    """
-    Alternative GET endpoint for searching influencers (for simple queries)
-    """
+    """Alternative GET endpoint for searching influencers (for simple queries)."""
     if k < 1 or k > 50:
         raise HTTPException(status_code=400, detail="k must be between 1 and 50")
     
@@ -232,34 +258,42 @@ async def search_influencers_get(query: str, k: int = 5):
     
 @app.post("/influencers/outreachEmailGenerator", response_model=OutreachResp)
 async def generate_outreach_emails(request: OutreachData):
-    """
-    Generate personalized outreach email for each given influencer using AI.
-    """
     try:
         influencers_list = request.influencers_data
         brand_name = request.brand_name
         brand_description = request.brand_description
 
         if not isinstance(influencers_list, list):
-            raise HTTPException(status_code=400, detail="Invalid input format. Expected a list of influencer data.")
-        
+            raise HTTPException(status_code=400, detail="Expected a list of influencer data.")
+
         emails = []
+
         for influencer in influencers_list:
             if not isinstance(influencer, dict):
                 raise HTTPException(status_code=400, detail="Each influencer must be a dictionary.")
             
-            prompt = ChatPromptTemplate.from_messages([
-                ("system", f"You are an expert outreach email generator for the brand: {brand_name}. Instructions: Generate short, to the point and eye catching outreach email for the influencer in a humanize way. Should not exceed 200 words."),
-                ("user", "Generate a personalized outreach email for the influencer: {influencer}")
-            ])
+            receiver_email = influencer.get("email")
+            if not receiver_email:
+                continue  # skip if email missing
 
+            # 🧠 LLM prompt & generation
+            prompt = ChatPromptTemplate.from_messages([
+                ("system", f"You are an expert outreach email generator for the brand: {brand_name}. Brand Description: {brand_description}. Instructions: Generate short, eye-catching outreach emails under 200 words."),
+                ("user", "Generate a personalized outreach email for the influencer: {influencer}. Don't include influencer name in the email")
+            ])
             messages = prompt.format_messages(influencer=influencer)
 
-            response = ai_matcher.llm.invoke(messages)
-            emails.append(response.content)
-        
-        return {"emails": emails}
-    
+            structured_resp = ai_matcher.llm.with_structured_output(EmailResponse)
+            response: EmailResponse = structured_resp.invoke(messages)
+
+            # 📧 Send the email
+            send_email(receiver_email, response.subject, response.body)
+
+            # 📥 Add to response list
+            emails.append(response)
+
+        return OutreachResp(emails=emails)
+
     except HTTPException:
         raise
     except Exception as e:
@@ -267,20 +301,16 @@ async def generate_outreach_emails(request: OutreachData):
 
 
 if __name__ == "__main__":
-    uvicorn.run(
-        "app:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-        log_level="info"
-    )
+    # uvicorn.run(
+    #     "app:app",
+    #     host="0.0.0.0",
+    #     port=8000,
+    #     reload=True,
+    #     log_level="info"
+    # )
 
-    # ai_matcher = AI_Matcher()
-    ## Push influencers to the vector database
-    # ai_matcher.push_influencer(influencers)
+    ai_matcher = AI_Matcher()
+    ai_matcher.push_influencer(influencers)
 
-
-    # Start Commands:
-    # python app.py
-    # # or
+    # Start command 
     # uvicorn app:app --host 0.0.0.0 --port 8000 --reload

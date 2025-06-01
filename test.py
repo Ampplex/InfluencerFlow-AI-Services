@@ -43,7 +43,7 @@ def extract_instagram_info(username):
 
 # Example usage
 if __name__ == "__main__":
-    username = "kushal_vijay_"
+    username = "dev.ankeshkumar"
     info = extract_instagram_info(username)
     for k, v in info.items():
         print(f"{k.capitalize()}: {v}")
