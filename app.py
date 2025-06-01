@@ -11,6 +11,11 @@ from dotenv import load_dotenv
 from pinecone import Pinecone
 import os
 import hashlib
+from fastapi.middleware.cors import CORSMiddleware
+from mock_data import influencers
+from langchain.prompts import ChatPromptTemplate
+import json
+from typing import Dict, Any
 
 # Load environment variables from .env file
 load_dotenv()
@@ -21,7 +26,7 @@ class InfluencerData(BaseModel):
     email: str
     bio: str
     followers: int
-    posts: int
+    link: Optional[str] = None
 
 class InfluencerResponse(BaseModel):
     id: str
@@ -29,7 +34,7 @@ class InfluencerResponse(BaseModel):
     email: str
     bio: str
     followers: int
-    posts: int
+    link: Optional[str] = None
 
 class QueryRequest(BaseModel):
     query: str
@@ -42,6 +47,15 @@ class QueryResponse(BaseModel):
     influencers: List[InfluencerResponse]
     count: int
 
+# Outreaching 
+class OutreachData(BaseModel):
+    influencers_data: List[Dict[str, Any]]
+    brand_name: str = Field(..., description="Name of the brand for outreach email generation")
+    brand_description: str = Field(..., description="Description of the brand for outreach email generation")
+
+class OutreachResp(BaseModel):
+    emails: List[str]
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Influencer Matching API",
@@ -49,8 +63,17 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # for dev only, be specific in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 def generate_deterministic_id(data):
-    unique_str = data['username'] + data['email']
+    unique_str = data['username'] + data.get('email', ' ')
     return hashlib.md5(unique_str.encode()).hexdigest()
 
 class AI_Matcher:
@@ -86,19 +109,20 @@ class AI_Matcher:
             docs = []
 
             for data in influencer_data:
-                summary = f"bio: {data['bio']}, username: {data['username']}, followers: {data['followers']}, posts: {data['posts']}"
+                summary = f"bio: {data['bio']}, username: {data['username']}, followers: {data['followers']}, link: {data.get('link', '')}, platform: {data['platform']}"
                 doc = Document(
                     page_content=summary,
                     metadata={
                         'username': data['username'],
                         'followers': data['followers'],
-                        'posts': data['posts'],
-                        'email': data['email'],
+                        'email': data.get('email', ''),
                         'bio': data['bio'],
+                        'link': data.get('link', ''),
+                        'platform': data['platform']
                     }
                 )
                 docs.append(doc)
-
+            # print(docs)
             vectorstore = PineconeVectorStore(index=index, embedding=self.embeddings, namespace="Influencers")
             
             # This will auto-generate document IDs
@@ -114,6 +138,7 @@ class AI_Matcher:
             index = self.pineconeIndex_init()
             vectorstore = PineconeVectorStore(index=index, embedding=self.embeddings, namespace="Influencers")
             results = vectorstore.similarity_search(query, k=k)
+            
             influencers = []
             for result in results:
                 influencer = {
@@ -123,9 +148,10 @@ class AI_Matcher:
                     }),
                     'username': result.metadata['username'],
                     'followers': result.metadata['followers'],
-                    'posts': result.metadata['posts'],
-                    'email': result.metadata['email'],
-                    'bio': result.metadata['bio']
+                    'email': result.metadata.get('email', ''),
+                    'bio': result.metadata['bio'],
+                    'link': result.metadata.get('link', ''),
+                    'platform': result.metadata.get('platform', 'Unknown')
                 }
                 influencers.append(influencer)
             return influencers
@@ -203,6 +229,42 @@ async def search_influencers_get(query: str, k: int = 5):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+    
+@app.post("/influencers/outreachEmailGenerator", response_model=OutreachResp)
+async def generate_outreach_emails(request: OutreachData):
+    """
+    Generate personalized outreach email for each given influencer using AI.
+    """
+    try:
+        influencers_list = request.influencers_data
+        brand_name = request.brand_name
+        brand_description = request.brand_description
+
+        if not isinstance(influencers_list, list):
+            raise HTTPException(status_code=400, detail="Invalid input format. Expected a list of influencer data.")
+        
+        emails = []
+        for influencer in influencers_list:
+            if not isinstance(influencer, dict):
+                raise HTTPException(status_code=400, detail="Each influencer must be a dictionary.")
+            
+            prompt = ChatPromptTemplate.from_messages([
+                ("system", f"You are an expert outreach email generator for the brand: {brand_name}. Instructions: Generate short, to the point and eye catching outreach email for the influencer in a humanize way. Should not exceed 200 words."),
+                ("user", "Generate a personalized outreach email for the influencer: {influencer}")
+            ])
+
+            messages = prompt.format_messages(influencer=influencer)
+
+            response = ai_matcher.llm.invoke(messages)
+            emails.append(response.content)
+        
+        return {"emails": emails}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
 
 if __name__ == "__main__":
     uvicorn.run(
@@ -212,6 +274,11 @@ if __name__ == "__main__":
         reload=True,
         log_level="info"
     )
+
+    # ai_matcher = AI_Matcher()
+    ## Push influencers to the vector database
+    # ai_matcher.push_influencer(influencers)
+
 
     # Start Commands:
     # python app.py

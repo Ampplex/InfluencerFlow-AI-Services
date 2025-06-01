@@ -1,357 +1,273 @@
-mock_influencers = [
+influencers = [
     {
-        'username': 'fitness_julia',
-        'followers': 980000,
-        'posts': 340,
-        'email': 'julia.fit@example.com',
-        'bio': 'Fitness enthusiast | Coach | Vegan 🌱',
-        'platform': 'Instagram'
+        'username': 'iamjayakishori',
+        'followers': 12300000,
+        'email': 'contact@iamjayakishori.com',
+        'bio': 'Spiritual & Motivational Speaker ॥ कृष्णं सदा सहायते ॥',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/iamjayakishori/'
     },
     {
-        'username': 'techwithryan',
-        'followers': 1150000,
-        'posts': 612,
-        'email': 'ryan.tech@example.com',
-        'bio': 'Tech tutorials, reviews, and gadgets 📱💻',
-        'platform': 'YouTube'
+        'username': 'garyvee',
+        'followers': 10400000,
+        'email': 'gary@vaynermedia.com',
+        'bio': 'CEO/Chairman @vaynermedia | Creator @veefriends | Investor in FB, Venmo, Twitter',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/garyvee/'
     },
     {
-        'username': 'makeupbyliya',
-        'followers': 720000,
-        'posts': 455,
-        'email': 'liya.beauty@example.com',
-        'bio': 'Beauty Blogger | Makeup tutorials 💄✨',
-        'platform': 'Instagram'
+        'username': 'gaurgopaldas',
+        'followers': 8700000,
+        'email': 'gaurgopaldas@gmail.com',
+        'bio': 'Personal coach, monk, lifestyle & motivational strategist, author',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/gaurgopaldas/'
     },
     {
-        'username': 'travel_vik',
-        'followers': 860000,
-        'posts': 580,
-        'email': 'vik.travels@example.com',
-        'bio': 'Travel the world with me 🌍✈️',
-        'platform': 'Instagram'
+        'username': 'aashnashroff',
+        'followers': 1000000,
+        'email': 'aashna@thesnobjournal.com',
+        'bio': 'Fashion, beauty, life',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/aashnashroff/'
     },
     {
-        'username': 'cookingwithnina',
-        'followers': 950000,
-        'posts': 302,
-        'email': 'nina.cooks@example.com',
-        'bio': 'Easy recipes & kitchen hacks 👩‍🍳🍲',
-        'platform': 'YouTube'
+        'username': 'maryphillips',
+        'followers': 2300000,
+        'email': 'bookings@maneaddicts.com',
+        'bio': 'Celebrity Makeup Artist',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/maryphillips/'
     },
     {
-        'username': 'thebookcrate',
-        'followers': 430000,
-        'posts': 215,
-        'email': 'books.crate@example.com',
-        'bio': 'Reviews, recs & reads 📚✨',
-        'platform': 'Instagram'
+        'username': 'nikkimakeup',
+        'followers': 2100000,
+        'email': 'info@nikkimakeup.com',
+        'bio': 'Makeup Artist | Masterclasses Available',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/nikkimakeup/'
     },
     {
-        'username': 'fashionablychloe',
-        'followers': 1200000,
-        'posts': 700,
-        'email': 'chloe.style@example.com',
-        'bio': 'NYC Fashionista | Collabs DM 📩',
-        'platform': 'Instagram'
+        'username': 'lisaeldridgemakeup',
+        'followers': 2000000,
+        'email': 'info@lisaeldridge.com',
+        'bio': 'Founder of Lisa Eldridge Makeup | NY Times Bestselling Author',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/lisaeldridgemakeup/'
     },
     {
-        'username': 'gamingnova',
-        'followers': 1750000,
-        'posts': 980,
-        'email': 'nova.games@example.com',
-        'bio': 'Let’s play! Daily gaming videos 🎮🔥',
-        'platform': 'YouTube'
+        'username': 'daniellemarcan',
+        'followers': 1700000,
+        'email': 'contact@daniellemarcan.co.uk',
+        'bio': 'Makeup Artist & Content Creator',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/daniellemarcan/'
     },
     {
-        'username': 'plantloverz',
-        'followers': 390000,
-        'posts': 190,
-        'email': 'plantsforall@example.com',
-        'bio': 'Indoor jungle creator 🌱🏡',
-        'platform': 'Instagram'
+        'username': 'hindash',
+        'followers': 1500000,
+        'email': 'info@hindash.com',
+        'bio': 'Founder of @hindashcosmetics',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/hindash/'
     },
     {
-        'username': 'codingwithsam',
-        'followers': 620000,
-        'posts': 88,
-        'email': 'sam.codes@example.com',
-        'bio': 'Learn to code | Python | JS 💻🚀',
-        'platform': 'YouTube'
+        'username': 'natashadenona',
+        'followers': 1500000,
+        'email': 'info@natashadenona.com',
+        'bio': 'Founder & Creative Director of Natasha Denona Cosmetics',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/natashadenona/'
     },
     {
-        'username': 'dailydoodleart',
-        'followers': 310000,
-        'posts': 612,
-        'email': 'doodle.art@example.com',
-        'bio': 'Sketching stories one frame at a time ✏️',
-        'platform': 'Instagram'
+        'username': 'samchapman',
+        'followers': 1300000,
+        'email': 'sam@crumbagency.com',
+        'bio': 'Makeup Artist | Co-founder of Real Techniques',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/samchapman/'
     },
     {
-        'username': 'mindsetmatters',
-        'followers': 540000,
-        'posts': 265,
-        'email': 'positivityzone@example.com',
-        'bio': 'Mental health | Daily affirmations 💬🧠',
-        'platform': 'Instagram'
+        'username': 'missjasleenarora',
+        'followers': 3200000,
+        'email': 'jasleenarora996@gmail.com',
+        'bio': 'Beauty & Lifestyle Influencer',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/missjasleenarora/'
     },
     {
-        'username': 'sneakerbeast101',
-        'followers': 890000,
-        'posts': 408,
-        'email': 'sneaker.king@example.com',
-        'bio': 'Sneaker reviews | Streetwear drip 👟🔥',
-        'platform': 'YouTube'
+        'username': 'sneha.sen',
+        'followers': 318100,
+        'email': 'sneha.sen@honeycombmedia.in',
+        'bio': 'Skincare | Makeup | Haircare | Biotechnologist | Licensed Skincare Consultant',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/sneha.sen/'
     },
     {
-        'username': 'mommycrafts',
-        'followers': 270000,
-        'posts': 200,
-        'email': 'crafty.mom@example.com',
-        'bio': 'DIY Projects & Parenting hacks ✂️🍼',
-        'platform': 'Instagram'
+        'username': 'kaylani',
+        'followers': 1000000,
+        'email': 'kaylani@chicinfluence.com',
+        'bio': 'Beauty/Hair Content Creator | Founder of @aniluhome',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/kaylani/'
     },
     {
-        'username': 'historydecoded',
-        'followers': 510000,
-        'posts': 175,
-        'email': 'hist.geek@example.com',
-        'bio': 'Uncovering the past 🔍📜',
-        'platform': 'YouTube'
+        'username': 'mayamiay',
+        'followers': 1000000,
+        'email': 'maja@blazerinvestments.com',
+        'bio': 'Beauty Content Creator | Business Developer AFRICA/EU/USA/UAE/UK',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/mayamiay/'
     },
     {
-        'username': 'comedyplug',
-        'followers': 930000,
-        'posts': 750,
-        'email': 'comedy.plug@example.com',
-        'bio': 'Daily sketches that make you LOL 😂',
-        'platform': 'Instagram'
+        'username': 'makeuptutorialsx0x',
+        'followers': 1000000,
+        'email': 'makeuptutorialsx0x@outlook.com',
+        'bio': 'Beauty & Fashion | Product Reviews',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/makeuptutorialsx0x/'
     },
     {
-        'username': 'fitnessfabian',
-        'followers': 1200000,
-        'posts': 411,
-        'email': 'fabian.fit@example.com',
-        'bio': 'Bodybuilding | Nutrition | Coaching 💪',
-        'platform': 'Instagram'
+        'username': 'makeupbyjh',
+        'followers': 1000000,
+        'email': 'makeupbyjh21@gmail.com',
+        'bio': 'Founder and CEO @Jdezbeauty | Beauty Vlogger',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/makeupbyjh/'
     },
     {
-        'username': 'techsaga',
-        'followers': 810000,
-        'posts': 503,
-        'email': 'techsaga@example.com',
-        'bio': 'Unboxing & gadget reviews 🎧📦',
-        'platform': 'YouTube'
+        'username': 'denitslava',
+        'followers': 1000000,
+        'email': 'denitslava@hotmail.com',
+        'bio': 'YouTube: Denitslava Makeup | TikTok: @denitslavaa',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/denitslava/'
     },
     {
-        'username': 'vocalvibes',
-        'followers': 420000,
-        'posts': 112,
-        'email': 'music.vibes@example.com',
-        'bio': 'Singing covers and originals 🎤🎵',
-        'platform': 'YouTube'
+        'username': 'promisetamang',
+        'followers': 1000000,
+        'email': 'promisetamang@gmail.com',
+        'bio': 'Known as Human Chameleon | Artist | Foodie',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/promisetamang/'
     },
     {
-        'username': 'culinarycrush',
-        'followers': 770000,
-        'posts': 380,
-        'email': 'foodcrush@example.com',
-        'bio': 'Gourmet dishes & food photography 🍽️📸',
-        'platform': 'Instagram'
+        'username': 'nikitabhardwaj00',
+        'followers': 520800,
+        'email': 'nikita.bhardwaj@example.com',
+        'bio': 'Professional Makeup Artist | Based in Mumbai/Patna',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/nikitabhardwaj00/'
     },
     {
-        'username': 'eco_emily',
-        'followers': 340000,
-        'posts': 218,
-        'email': 'greenemily@example.com',
-        'bio': 'Sustainable living & eco hacks ♻️🌍',
-        'platform': 'Instagram'
+        'username': 'steffysunny',
+        'followers': 515900,
+        'email': 'steffy.sunny@example.com',
+        'bio': 'Makeup Artist | Content Creator',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/steffysunny/'
     },
     {
-        'username': 'lifewithzane',
-        'followers': 650000,
-        'posts': 290,
-        'email': 'zanelife@example.com',
-        'bio': 'Lifestyle, vlogs & motivation 💫',
-        'platform': 'YouTube'
+        'username': 'makeuplover.saba',
+        'followers': 25000,
+        'email': 'saba.naveed29@yahoo.com',
+        'bio': 'Beauty Blogger | Makeup & Skincare Influencer',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/makeuplover.saba/'
     },
     {
-        'username': 'gadgetbyteindia',
-        'followers': 1350000,
-        'posts': 904,
-        'email': 'gadgetbyte@example.com',
-        'bio': 'Tech news | Unboxings | Reviews 🇮🇳📱',
-        'platform': 'YouTube'
+        'username': 'yohanarangelmua',
+        'followers': 42000,
+        'email': 'yohanabr00@gmail.com',
+        'bio': 'Makeup Artist | Soft & Glam Makeup | Bridal | Photo Shoots',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/yohanarangelmua/'
     },
     {
-        'username': 'thepetgram',
-        'followers': 710000,
-        'posts': 550,
-        'email': 'furryfriends@example.com',
-        'bio': 'Cute pets and their stories 🐾🐶',
-        'platform': 'Instagram'
+        'username': 'rositaaliana',
+        'followers': 69000,
+        'email': 'MakeupbyRositaa@gmail.com',
+        'bio': 'Self-taught MUA | Content Creator | Makeup Lover',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/rositaaliana/'
     },
     {
-        'username': 'luxurylivingnow',
-        'followers': 460000,
-        'posts': 244,
-        'email': 'luxliv@example.com',
-        'bio': 'Luxury homes, cars & watches ⌚🏠🚘',
-        'platform': 'Instagram'
+        'username': 'weriithasoloriio',
+        'followers': 60000,
+        'email': 'weriitha.soloriio@example.com',
+        'bio': 'Makeup Enthusiast | Content Creator',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/weriithasoloriio/'
     },
     {
-        'username': 'devdaily',
-        'followers': 520000,
-        'posts': 193,
-        'email': 'devdaily@example.com',
-        'bio': 'Web dev tips and projects 💻🔥',
-        'platform': 'YouTube'
+        'username': 'rachelfinley',
+        'followers': 200200,
+        'email': 'rachel@hydrationceo.com',
+        'bio': 'Your unfiltered skincare & beauty bestie',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/rachelfinley/'
     },
     {
-        'username': 'streetfoodhunter',
-        'followers': 990000,
-        'posts': 612,
-        'email': 'streeteats@example.com',
-        'bio': 'Exploring street food globally 🌍🍢',
-        'platform': 'YouTube'
+        'username': 'mamata',
+        'followers': 60700,
+        'email': 'mamata@example.com',
+        'bio': 'Join me on my acne journey',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/mamata/'
     },
     {
-        'username': 'zenwithava',
-        'followers': 330000,
-        'posts': 280,
-        'email': 'ava.yoga@example.com',
-        'bio': 'Yoga, meditation, and wellness 🧘‍♀️💚',
-        'platform': 'Instagram'
+        'username': 'shivangikochhar',
+        'followers': 56000,
+        'email': 'shivangi.kochhar@example.com',
+        'bio': 'Owner @bangs.and.beard | Certified Freelance Makeup Artist',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/shivangikochhar/'
     },
     {
-        'username': 'laughterfuel',
-        'followers': 1180000,
-        'posts': 744,
-        'email': 'laughfuel@example.com',
-        'bio': 'Comedy reels that’ll make your day 😂🔥',
-        'platform': 'Instagram'
+        'username': 'makeupbyameliawebb',
+        'followers': 65000,
+        'email': 'amelia.webb@example.com',
+        'bio': 'Freelance Makeup Artist | Melbourne',
+        'platform': 'Instagram',
+        'link': 'https://www.instagram.com/makeupbyameliawebb/'
     },
     {
-        'username': 'diydesignzone',
-        'followers': 610000,
-        'posts': 445,
-        'email': 'diyzone@example.com',
-        'bio': 'Crafts | Home decor | Tutorials 🎨🏠',
-        'platform': 'YouTube'
+        "username": "technicalguruji",
+        "followers": 2200000,
+        "email": "tg.giveaway@gmail.com",
+        "bio": "Gadget reviews, technology tips, app recommendations, and tech news.",
+        "platform": "Instagram",
+        "link": "https://www.instagram.com/technicalguruji/"
     },
     {
-        'username': 'motivatemindset',
-        'followers': 390000,
-        'posts': 208,
-        'email': 'motivation@example.com',
-        'bio': 'Success quotes & inspiration 🌟💭',
-        'platform': 'Instagram'
+        "username": "sandeepmaheshwari",
+        "followers": 32100000,
+        "bio": "Motivation, personal development, productivity tools, and technology insights.",
+        "platform": "Instagram",
+        "link": "https://www.instagram.com/sandeepmaheshwari/"
     },
     {
-        'username': 'codingtutor',
-        'followers': 870000,
-        'posts': 120,
-        'email': 'code.tutor@example.com',
-        'bio': 'Coding lessons made simple 🧑‍💻📘',
-        'platform': 'YouTube'
+        "username": "techwithtim",
+        "followers": 1500000,
+        "email": "tim@123@gmail.com",
+        "bio": "Programming tutorials, coding challenges, and tech career advice.",
+        "platform": "Instagram",
+        "link": "https://www.instagram.com/techwithtim/"
     },
     {
-        'username': 'glamgurl',
-        'followers': 1050000,
-        'posts': 496,
-        'email': 'glamgirl@example.com',
-        'bio': 'Beauty, lifestyle, and fashion 💅👗',
-        'platform': 'Instagram'
+        "username": "thetechchap",
+        "followers": 800000,
+        "email": "techchap@gmail.com",
+        "bio": "Tech reviews, gadget comparisons, and tech news.",
+        "platform": "Instagram",
+        "link": "https://www.instagram.com/thetechchap/"
     },
     {
-        'username': 'indie_beats',
-        'followers': 720000,
-        'posts': 138,
-        'email': 'beats.indie@example.com',
-        'bio': 'Indie music & underground artists 🎶🌌',
-        'platform': 'YouTube'
+        'username': 'jomatech',
+        'followers': 2280000,
+        "email": "business@joma.io",
+        'platform': 'YouTube',
+        'bio': 'Tech and programming content.',
+        'link': 'https://www.youtube.com/@jomakaze'
     },
-]
-
-coding_influencers = [
-        {
-        'username': 'codewithnina',
-        'followers': 850000,
-        'posts': 220,
-        'email': 'nina.code@example.com',
-        'bio': 'Teaching Python and full-stack development 👩‍💻💡 | Building dev confidence!',
-        'platform': 'YouTube'
-    },
-    {
-        'username': 'dev_dave',
-        'followers': 430000,
-        'posts': 185,
-        'email': 'dave.dev@example.com',
-        'bio': 'React, Node.js & coding tutorials 🧑‍💻 | Let’s build together!',
-        'platform': 'Instagram'
-    },
-    {
-        'username': 'tech_simplified',
-        'followers': 610000,
-        'posts': 152,
-        'email': 'contact@techsimplified.io',
-        'bio': 'Simplifying system design, DSA & interview prep 📊🎯',
-        'platform': 'YouTube'
-    },
-    {
-        'username': 'coder.queen',
-        'followers': 970000,
-        'posts': 310,
-        'email': 'queenofcode@example.com',
-        'bio': 'Software engineer @FAANG | Inspiring women in tech 👑💻',
-        'platform': 'TikTok'
-    },
-    {
-        'username': 'debuglife',
-        'followers': 520000,
-        'posts': 176,
-        'email': 'hello@debuglife.dev',
-        'bio': 'Relatable dev memes, tips & open source grind 💬🔥',
-        'platform': 'Instagram'
-    },
-    {
-        'username': 'thebughunter',
-        'followers': 305000,
-        'posts': 142,
-        'email': 'bughunter@example.com',
-        'bio': 'Cybersecurity & ethical hacking 🔐 | Bug bounty journey',
-        'platform': 'YouTube'
-    },
-    {
-        'username': 'ai.alina',
-        'followers': 440000,
-        'posts': 99,
-        'email': 'alina.ai@example.com',
-        'bio': 'ML models & GenAI breakdowns 🤖🧠 | Research meets real world',
-        'platform': 'LinkedIn'
-    },
-    {
-        'username': 'fullstackfred',
-        'followers': 690000,
-        'posts': 204,
-        'email': 'fred.codes@example.com',
-        'bio': 'Daily coding challenges, backend systems, and coffee ☕💾',
-        'platform': 'Instagram'
-    },
-    {
-        'username': 'techy_terry',
-        'followers': 510000,
-        'posts': 178,
-        'email': 'terry@techbytes.io',
-        'bio': 'Short-form tutorials on TypeScript, APIs & cloud ☁️⚡',
-        'platform': 'TikTok'
-    },
-    {
-        'username': 'dsa_mastery',
-        'followers': 770000,
-        'posts': 240,
-        'email': 'dsa.master@example.com',
-        'bio': 'Crack coding interviews with daily DSA problems 🧠🧩',
-        'platform': 'YouTube'
-    }
 ]
