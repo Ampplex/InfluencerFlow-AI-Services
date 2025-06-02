@@ -290,7 +290,7 @@ async def generate_outreach_emails(request: OutreachData):
             response: EmailResponse = structured_resp.invoke(messages)
 
             # 📧 Send the email
-            send_email(receiver_email, response.subject, response.body + f"\nLets connect on http://localhost:5173/negotiation-chat/{campaign_id}")
+            send_email(receiver_email, response.subject, response.body + f"\nLets connect on https://influencer-flow-flax.vercel.app/negotiation-chat/{campaign_id}")
 
             # 📥 Add to response list
             emails.append(response)
