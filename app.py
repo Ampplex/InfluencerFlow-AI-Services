@@ -66,7 +66,7 @@ class OutreachResp(BaseModel):
 
 def send_email(receiver_email: str, subject: str, body: str):
     sender_email = "ankesh3905222@gmail.com"
-    sender_password = "XXXXXXXXXXXX"
+    sender_password = "zqbe zgjg dcee vani"
 
     msg = EmailMessage()
     msg['Subject'] = subject
