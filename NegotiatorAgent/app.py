@@ -435,6 +435,13 @@ async def root():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=3000)
+    port = int(os.environ.get("PORT", 3000))  # fallback to 8000 if PORT not set
+    uvicorn.run(
+        "app:app",
+        host="0.0.0.0",
+        port=port,
+        reload=True,
+        log_level="info"
+    )
     
     # Run command: uvicorn app:app --host 0.0.0.0 --port 3000 --reload

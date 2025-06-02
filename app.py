@@ -2,10 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 import uvicorn
-from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.documents import Document
-from langchain_pinecone import PineconeVectorStore
 from dotenv import load_dotenv
 from pinecone import Pinecone
 import os
