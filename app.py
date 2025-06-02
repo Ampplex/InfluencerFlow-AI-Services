@@ -4,7 +4,6 @@ from typing import List, Optional, Dict, Any
 import uvicorn
 from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
-from pinecone import Pinecone
 import os
 import hashlib
 from fastapi.middleware.cors import CORSMiddleware
