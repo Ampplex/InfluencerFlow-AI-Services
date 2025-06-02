@@ -393,7 +393,6 @@ async def generate_outreach_emails(request: OutreachData):
 
 
 if __name__ == "__main__":
-if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))  # fallback to 8000 if PORT not set
     uvicorn.run(
         "app:app",
