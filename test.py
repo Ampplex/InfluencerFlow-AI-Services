@@ -22,7 +22,6 @@ def extract_instagram_info(username):
 
         counts = summary.split(" - ")[0].split(", ")
         followers = counts[0].split(" ")[0]
-        following = counts[1].split(" ")[0]
         posts = counts[2].split(" ")[0]
 
         # Extract bio/description (in script tag)
@@ -32,10 +31,9 @@ def extract_instagram_info(username):
         return {
             "username": username,
             "followers": followers,
-            "following": following,
             "posts": posts,
             "bio": bio,
-            "summary": f"username: {username}, followers: {followers}, following: {following}, posts: {posts}, bio: {bio}"
+            "summary": f"username: {username}, followers: {followers}, posts: {posts}, bio: {bio}"
         }
 
     except Exception as e:
