@@ -300,6 +300,13 @@ class AI_Matcher:
         except Exception as e:
             logger.error(f"❌ Error assigning engagement_score to old influencers: {str(e)}")
 
+    def get_influencers(self, query=" ", k=100):
+        index = self.pineconeIndex_init()
+        vectorstore = PineconeVectorStore(index=index, embedding=self.embeddings, namespace="Influencers")
+        retrieved_docs = vectorstore.similarity_search(query, k=k)
+        
+        return retrieved_docs
+
     def query_influencer(self, query, k):
         """Query influencers from vector database based on similarity search, then refine using LLM."""
         logger.info(f"🔍 Querying influencers with query: '{query}', k={k}")
@@ -561,12 +568,14 @@ if __name__ == "__main__":
     # Manual call for one-time data migration (commented out):
     # ai_matcher.assign_engagement_score_to_old_influencers()
 
-    logger.info("🚀 Starting uvicorn server on port 8080...")
-    uvicorn.run(
-        "app:app",
-        host="0.0.0.0",
-        port=int(os.getenv("PORT", 8080)),
-        log_level="info"
-    )
+    # logger.info("🚀 Starting uvicorn server on port 8080...")
+    # uvicorn.run(
+    #     "app:app",
+    #     host="0.0.0.0",
+    #     port=int(os.getenv("PORT", 8080)),
+    #     log_level="info"
+    # )
+    resp = AI_Matcher().get_influencers()
+    print(resp)
 
     # Start command: uvicorn app:app --host 0.0.0.0 --port 5050 --reload --log-level info
