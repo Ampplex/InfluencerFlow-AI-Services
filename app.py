@@ -102,10 +102,25 @@ class OutreachResp(BaseModel):
     emails: List[EmailResponse]
 
 def send_email(receiver_email: str, subject: str, body: str):
+    """Send email using Brevo SMTP configuration."""
     logger.info(f"Attempting to send email to: {receiver_email}")
-    sender_email = "ankesh3905222@gmail.com"
-    sender_password = "zqbe zgjg dcee vani"
+    
+    # Get SMTP configuration from environment variables
+    smtp_server = os.getenv("SMTP_SERVER", "smtp-relay.brevo.com")
+    smtp_port = int(os.getenv("SMTP_PORT", "587"))
+    smtp_username = os.getenv("SMTP_USERNAME") 
+    smtp_password = os.getenv("SMTP_PASSWORD")
+    sender_email = os.getenv("SENDER_EMAIL")
+    
+    # Validate required environment variables
+    if not all([smtp_username, smtp_password, sender_email]):
+        logger.error("❌ Missing required SMTP configuration in environment variables")
+        raise HTTPException(
+            status_code=500, 
+            detail="SMTP configuration incomplete. Check environment variables."
+        )
 
+    # Create email message
     msg = EmailMessage()
     msg['Subject'] = subject
     msg['From'] = sender_email
@@ -113,10 +128,32 @@ def send_email(receiver_email: str, subject: str, body: str):
     msg.set_content(body)
 
     try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login(sender_email, sender_password)
-            smtp.send_message(msg)
+        # Use STARTTLS for port 587 (recommended) or SSL for port 465
+        if smtp_port == 587:
+            # STARTTLS connection (recommended for Brevo)
+            with smtplib.SMTP(smtp_server, smtp_port) as smtp:
+                smtp.starttls()  # Enable encryption
+                smtp.login(smtp_username, smtp_password)
+                smtp.send_message(msg)
+        elif smtp_port == 465:
+            # SSL connection
+            with smtplib.SMTP_SSL(smtp_server, smtp_port) as smtp:
+                smtp.login(smtp_username, smtp_password)
+                smtp.send_message(msg)
+        else:
+            # Plain SMTP (not recommended for production)
+            with smtplib.SMTP(smtp_server, smtp_port) as smtp:
+                smtp.login(smtp_username, smtp_password)
+                smtp.send_message(msg)
+                
         logger.info(f"✅ Email sent successfully to {receiver_email} with subject: {subject}")
+        
+    except smtplib.SMTPAuthenticationError as e:
+        logger.error(f"❌ SMTP Authentication failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="SMTP Authentication failed. Check credentials.")
+    except smtplib.SMTPException as e:
+        logger.error(f"❌ SMTP error occurred: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"SMTP error: {str(e)}")
     except Exception as e:
         logger.error(f"❌ Failed to send email to {receiver_email}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
@@ -504,7 +541,7 @@ async def generate_outreach_emails(request: OutreachData):
                 response: EmailResponse = structured_resp.invoke(messages)
 
                 # Send the email
-                send_email(receiver_email, response.subject, response.body + f"\nLets connect on https://influencer-flow-flax.vercel.app/negotiation-chat/{campaign_id}/{receiver_email}")
+                send_email(receiver_email, response.subject, response.body + f"\nLets connect on https://app.influencer.in/negotiation-chat/{campaign_id}/{receiver_email}")
                 
                 emails.append(response)
                 successful_sends += 1

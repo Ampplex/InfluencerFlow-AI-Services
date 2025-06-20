@@ -2,7 +2,7 @@ influencers = [
     {
         'username': 'iamjayakishori',
         'followers': 12300000,
-        'email': 'contact@iamjayakishori.com',
+        'email': 'rishabh@inulute.com',
         'bio': 'Spiritual & Motivational Speaker ॥ कृष्णं सदा सहायते ॥',
         'platform': 'Instagram',
         'link': 'https://www.instagram.com/iamjayakishori/'
@@ -10,7 +10,7 @@ influencers = [
     {
         'username': 'garyvee',
         'followers': 10400000,
-        'email': 'gary@vaynermedia.com',
+        'email': 'rishabh@inulute.com',
         'bio': 'CEO/Chairman @vaynermedia | Creator @veefriends | Investor in FB, Venmo, Twitter',
         'platform': 'Instagram',
         'link': 'https://www.instagram.com/garyvee/'
